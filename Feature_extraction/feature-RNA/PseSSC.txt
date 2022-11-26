@@ -1,0 +1,2 @@
+
+The PseSSC feature is downloaded from http://bioinformatics.hitsz.edu.cn/Pse-in-One2.0/ .
