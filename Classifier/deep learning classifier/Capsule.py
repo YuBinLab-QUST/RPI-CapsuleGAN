@@ -7,6 +7,7 @@ Created on Wed Nov 10 16:21:24 2021
 import pandas as pd
 import numpy as np
 import math
+
 from sklearn.preprocessing import scale
 from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import roc_curve, auc
@@ -16,7 +17,9 @@ from keras.layers import BatchNormalization, Activation, ZeroPadding2D
 from keras.layers.advanced_activations import LeakyReLU
 from keras.layers.convolutional import UpSampling2D, Conv2D
 from keras.models import Sequential, Model
-from keras.optimizers import Adam
+from keras.optimizers import adam_v2 #Adam 改为 adam_v2
+
+
 
 def categorical_probas_to_classes(p):
     return np.argmax(p, axis=1)
@@ -64,7 +67,7 @@ def calculate_performace(test_num, pred_y,  labels):
     f1 = float(tp*2)/(tp*2+fp+fn+1e-06)
     return acc, precision, npv, sensitivity, specificity, mcc, f1
 
-datasetwx = pd.read_csv('RPI488_EN_0.1_39_135.csv')
+datasetwx = pd.read_csv('train_RPI488_kmer_CT_feature.csv')
 datasetwx = np.array(datasetwx)
 datasetwx = datasetwx[:, 1:]
 datasetwx = np.array(datasetwx,'float32')
@@ -133,9 +136,9 @@ def Capsule_Layer():
     s_j = LeakyReLU()(x)
 
     pred = Dense(2, activation='sigmoid')(s_j)
-    model = Model(img, pred)
+    model = Model (img, pred)
     # model.summary()
-    model.compile(loss='binary_crossentropy', optimizer=Adam(0.0002, 0.5), metrics=['accuracy'])
+    model.compile(loss='binary_crossentropy', optimizer=adam_v2.Adam (0.0002, 0.5), metrics=['accuracy'])
     return model
 
 

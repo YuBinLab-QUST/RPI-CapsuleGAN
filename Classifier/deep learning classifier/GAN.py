@@ -14,9 +14,9 @@ from keras.layers import Input, Dense
 from keras.layers import BatchNormalization
 from keras.layers.advanced_activations import LeakyReLU
 from keras.models import Sequential, Model
-from keras.optimizers import Adam
+from keras.optimizers import adam_v2
 
-data_start = pd.read_csv("RPI488_EN_0.1_39_135.csv")
+data_start = pd.read_csv("train_RPI488_kmer_CT_feature.csv")
 label_P = np.ones(int('243'))
 label_N = np.zeros(int('245'))
 label_start = np.hstack((label_P,label_N))
@@ -29,7 +29,7 @@ y= label
 # X = np.reshape(shu,(-1,1,input_dimwx))
 X = shu
 
-optimizer = Adam(0.0002, 0.5)
+optimizer = adam_v2(0.0002, 0.5)
 n_y_value = 2
 
 D = Sequential()

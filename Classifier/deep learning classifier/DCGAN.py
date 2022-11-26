@@ -16,7 +16,7 @@ from keras.layers import BatchNormalization, Activation, ZeroPadding2D
 from keras.layers.advanced_activations import LeakyReLU
 from keras.layers.convolutional import UpSampling2D, Conv2D
 from keras.models import Sequential, Model
-from keras.optimizers import Adam
+from keras.optimizers import adam_v2
 
 def categorical_probas_to_classes(p):
     return np.argmax(p, axis=1)
@@ -64,14 +64,14 @@ def calculate_performace(test_num, pred_y,  labels):
     f1 = float(tp*2)/(tp*2+fp+fn+1e-06)
     return acc, precision, npv, sensitivity, specificity, mcc, f1
 
-datasetwx = pd.read_csv('RPI488_EN_0.1_39_135.csv')
+datasetwx = pd.read_csv('train_RPI488_kmer_CT_feature.csv')
 datasetwx = np.array(datasetwx)
 datasetwx = datasetwx[:, 1:]
 datasetwx = np.array(datasetwx,'float32')
 [sample_num, input_dimwx] = np.shape(datasetwx)
 
 shapewx = [1,input_dimwx,1]
-datasetwx = np.reshape(datasetwx, (sample_num, 1,input_dimwx,1))
+datasetwx = np.reshape(datasetwx, (sample_num,input_dimwx))
 
 label_P = np.ones(int(243))
 label_N = np.zeros(int(245))
@@ -118,14 +118,14 @@ def build_generator():
     return Model(x_noise, gen_out)
 
 generator = build_generator()
-generator.compile(loss='binary_crossentropy', optimizer=Adam(0.002, 0.8), metrics=['accuracy'])
+generator.compile(loss='binary_crossentropy', optimizer=adam_v2.Adam(0.002, 0.8), metrics=['accuracy'])
 
 z = Input(shape=(input_dimwx,))
 img = generator(z)
 discriminator.trainable = False
 valid = discriminator(img)
 combined = Model(z, valid)
-combined.compile(loss='binary_crossentropy', optimizer=Adam(0.002, 0.8), metrics=['accuracy'])
+combined.compile(loss='binary_crossentropy', optimizer=adam_v2.Adam(0.002, 0.8), metrics=['accuracy'])
 
 ytest = np.ones((1, 2))*0.5
 yscore = np.ones((1, 2))*0.5
