@@ -31,4 +31,3 @@ RPI-CapsuleGAN: predicting RNA-protein interactions through an interpretable gen
  * deep learning classifier is the implementation of deep learning classifiers compared in this work, among which Capsule, CNN, DCGAN, DNN, GAN, GRU.
 
 
-
